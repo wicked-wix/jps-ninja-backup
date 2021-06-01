@@ -1,0 +1,87 @@
+targetNodes:
+  nodeType:
+    - mysql
+    - mysql5
+    - mysql5-6
+    - mariadb-dockerized
+    - mariadb10
+    - postgresql
+    - postgres9
+    - postgres10
+    - postgres11
+    - mongodb-dockerized
+
+homepage: https://backup.ninja
+#baseUrl: # alla relativa sökvägar nedan läggs på denna URL.
+#+ LE använder t.ex. Jelastics GitRepo för baseUrl (https://raw.githubusercontent.com/jelastic-jps/lets-encrypt/master/)
+# hitta en bättre bild
+logo: https://backup.ninja/themes/custom/backupninja_2019/images/backupninja_logo2.svg
+#logo: https://backup.ninja/themes/custom/backupninja_2019/logo.svg
+
+description:
+  text: Backup Ninja is a simple, secure, and cost-effective SaaS service you can use to backup the world’s most popular open source databases
+  short: Backup Ninja is a simple, secure, and cost-effective SaaS service you can use to backup the world’s most popular open source databases
+
+type: update
+name: BackupNinja
+settings:
+  fields:
+    - type: list
+      name: dbtype
+      caption: DB Type
+      values:
+        - value: mysql
+          caption: MySQL
+        - value: mysql
+          caption: MariaDB
+        - value: postgres
+          caption: PostgreSQL
+        - value: mongodb
+          caption: MongoDB
+    - type: string
+      name: user
+      caption: DB Username
+      required: true
+    - type: string
+      inputType: password
+      name: password
+      caption: DB Password
+      required: true
+    - type: string
+      name: host
+      caption: DB Host
+      required: true
+      default: 127.0.0.1
+    - type: string
+      name: port
+      caption: DB Port
+      required: false
+      default: 3306
+      regex: "[0-9]+"
+    - type: string
+      name: uuid
+      caption: UUID (Backup Ninja API)
+      required: true
+
+onInstall:
+  - cmd[sqldb]:
+    - wget -q -O - https://agents-api.s9s.io/static/install/linux.sh | bash -s -- install ${settings.uuid} ${settings.dbtype}://${settings.user}:'${settings.password}'@${settings.host}:${settings.port} agent-auth-api.s9s.io:443
+    user: root
+
+onUninstall:
+  - cmd[sqldb]:
+    - wget -q -O - https://agents-api.s9s.io/static/install/linux.sh | bash -s -- uninstall; rm -rf /var/lib/backup-agent/
+    user: root
+
+# Other functions to research
+#onAfterClone:
+#onAfterConfirmTransfer:
+#onBeforeMigrate:
+#onAfterMigrate:
+
+onAfterClone: # The event is related to cloning environment (performed via the Jelastic dashboard by means of the same-named button) and is triggered after it.
+  - cmd[sqldb]:
+    - wget -q -O - https://agents-api.s9s.io/static/install/linux.sh | bash -s -- uninstall; rm -rf /var/lib/backup-agent/
+    user: root
+
+success: Backup Ninja has been successfully installed!
