@@ -12,15 +12,20 @@ targetNodes:
     - mongodb-dockerized
 
 homepage: https://backup.ninja
+
+#This part defines the location where the scripts are
 baseUrl: https://raw.githubusercontent.com/wicked-wix/jps-ninja-backup/master
 #+ LE använder t.ex. Jelastics GitRepo för baseUrl (https://raw.githubusercontent.com/jelastic-jps/lets-encrypt/master/)
 logo: https://backup.ninja/themes/custom/backupninja_2019/images/backupninja_logo2.svg
 #logo: https://backup.ninja/themes/custom/backupninja_2019/logo.svg
 
+#Pretty much self explanatory
+#Expand the description with more descriptive info ex More clones = more storage data, swift cleanup is manual i think
 description:
   text: Backup Ninja is a simple, secure, and cost-effective SaaS service you can use to backup the world’s most popular open source databases
   short: Backup Ninja is a simple, secure, and cost-effective SaaS service you can use to backup the world’s most popular open source databases
 
+#This part is the graphical part of the app where it asks for parameters
 type: update
 name: BackupNinja
 settings:
@@ -65,19 +70,23 @@ settings:
       required: true
       default: a511b596-ba45-46c1-af3d-18cfbcd527a4
 
+#This is what happens during installation
 onInstall:
   - cmd[sqldb]:
     - wget -q -O - https://agents-api.s9s.io/static/install/linux.sh | bash -s -- install ${settings.uuid} ${settings.dbtype}://${settings.user}:'${settings.password}'@${settings.host}:${settings.port} agent-auth-api.s9s.io:443
     user: root
 
+#This is what happens during uninstallation
 onUninstall:
   - removeAgent
 
+#When you clone an environment this is supposed to happen
 onAfterClone: # The event is related to cloning environment (performed via the Jelastic dashboard by means of the same-named button) and is triggered after it.
   - install:
     jps: ${baseUrl}/uninstall.jps # TODO: Set correct name
     envName: ${event.response.env.envName}
 
+#Here we can make custom functions like def in python or func in java
 actions:
   removeAgent:
   - cmd[sqldb]:
