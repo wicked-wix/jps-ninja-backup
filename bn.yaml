@@ -1,3 +1,11 @@
+type: update
+id: backupninja
+version: 6.0.4
+name: BackupNinja Plugin
+
+categories:
+- apps/dev-and-admin-tools
+
 targetNodes:
   nodeType:
     - mysql
@@ -23,11 +31,9 @@ logo: https://backup.ninja/themes/custom/backupninja_2019/images/backupninja_log
 #Expand the description with more descriptive info ex More clones = more storage data, swift cleanup is manual i think
 description:
   text: Backup Ninja is a simple, secure, and cost-effective SaaS service you can use to backup the world’s most popular open source databases
-  short: Backup Ninja is a simple, secure, and cost-effective SaaS service you can use to backup the world’s most popular open source databases
+  short: Backup Ninja made Simple
 
 #This part is the graphical part of the app where it asks for parameters
-type: update
-name: BackupNinja
 settings:
   fields:
     - type: list # Automate with conditions (if statement)
@@ -82,8 +88,7 @@ onUninstall:
 
 #When you clone an environment this is supposed to happen
 onAfterClone: # The event is related to cloning environment (performed via the Jelastic dashboard by means of the same-named button) and is triggered after it.
-  - install:
-    jps: ${baseUrl}/uninstall.jps # TODO: Set correct name
+  - install: ${baseUrl}/uninstall.jps # TODO: Set correct name
     envName: ${event.response.env.envName}
 
 #Here we can make custom functions like def in python or func in java
