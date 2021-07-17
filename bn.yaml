@@ -19,7 +19,7 @@ targetNodes:
     - postgres11
     - mongodb-dockerized
 
-homepage: https://backup.ninja
+homepage: https://backup.ninja #change to git repo or other written guide
 
 #This part defines the location where the scripts are
 baseUrl: https://raw.githubusercontent.com/wicked-wix/jps-ninja-backup/master
@@ -41,9 +41,7 @@ settings:
       caption: DB Type
       values:
         - value: mysql
-          caption: MySQL
-        - value: mysql
-          caption: MariaDB
+          caption: MySQL/MariaDB
         - value: postgres
           caption: PostgreSQL
         - value: mongodb
@@ -52,13 +50,11 @@ settings:
       name: user
       caption: DB Username
       required: true
-      default: ninjatest
     - type: string
       inputType: password
       name: password
       caption: DB Password
       required: true
-      default: thisisatestpass
     - type: string
       name: host
       caption: DB Host
@@ -74,7 +70,6 @@ settings:
       name: uuid
       caption: UUID (Backup Ninja API)
       required: true
-      default: a511b596-ba45-46c1-af3d-18cfbcd527a4
 
 #This is what happens during installation
 onInstall:
